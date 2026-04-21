@@ -1,144 +1,153 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { PROJECTS, CATEGORIES } from '../data/mockData';
-import { MapPin, ArrowRight, ShieldCheck, Star } from 'lucide-react';
+import { Search, MapPin, ShieldCheck, BedDouble, Square, Car, Star, CheckCircle2, TrendingUp, Users, ShieldAlert } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Home = () => {
   return (
     <div className="animate-fade-in" style={{ backgroundColor: 'var(--bg-soft-gray)', minHeight: '100vh' }}>
-      {/* Refined Search Header */}
-      <section style={{ backgroundColor: 'white', borderBottom: '1px solid var(--border-light)', padding: '2rem 0' }}>
-        <div className="container">
-          <h2 style={{ marginBottom: '1.5rem', fontSize: '1.8rem' }}>Properties in Sangli & Islampur</h2>
-          <div className="search-box-container" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <div className="glass" style={{ flex: 1, display: 'flex', alignItems: 'center', padding: '0.75rem 1.5rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--primary-blue)' }}>
-              <Search size={22} color="var(--primary-blue)" style={{ marginRight: '1rem' }} />
-              <div style={{ flex: 1 }}>
-                <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '2px' }}>Location</p>
-                <input 
-                  type="text" 
-                  placeholder="Enter Locality (Vishrambag, Sangli, Islampur...)" 
-                  style={{ width: '100%', border: 'none', outline: 'none', fontWeight: 600, fontSize: '1rem' }}
-                />
+      
+      {/* 🚀 HERO SEARCH SECTION - Point 14 */}
+      <section style={{ backgroundColor: 'var(--deep-navy)', padding: '6rem 0', color: 'white', position: 'relative', overflow: 'hidden' }}>
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
+            <h1 style={{ color: 'white', fontSize: '3.5rem', marginBottom: '1.5rem', lineHeight: 1.1 }}>Find Your Trusted Home <br /> in Islampur region.</h1>
+            <p style={{ fontSize: '1.2rem', opacity: 0.8, marginBottom: '3rem' }}>The only platform with 100% verified listings from local market experts.</p>
+            
+            <div className="glass" style={{ padding: '0.8rem', borderRadius: 'var(--radius-xl)', display: 'flex', gap: '0.5rem', backgroundColor: 'rgba(255,255,255,0.1)' }}>
+              <select style={heroSelectStyle}>
+                <option>Buy</option>
+                <option>Rent</option>
+                <option>Commercial</option>
+              </select>
+              <div style={{ flex: 1, backgroundColor: 'white', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '0 1.5rem' }}>
+                <Search color="var(--text-muted)" size={20} />
+                <input type="text" placeholder="Search by Project, Locality or Landmark..." style={{ border: 'none', outline: 'none', width: '100%', padding: '1rem', fontWeight: 600, fontSize: '1.1rem' }} />
               </div>
+              <Link to="/listings">
+                <button className="btn btn-primary" style={{ padding: '0 2.5rem', height: '100%', borderRadius: '12px', fontSize: '1.1rem' }}>Search</button>
+              </Link>
             </div>
-            <div className="glass" style={{ width: '200px', display: 'flex', alignItems: 'center', padding: '0.75rem 1.5rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-light)' }}>
-              <div style={{ flex: 1 }}>
-                <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '2px' }}>Budget</p>
-                <select style={{ width: '100%', border: 'none', outline: 'none', fontWeight: 600, fontSize: '1rem', background: 'transparent' }}>
-                  <option>Any Budget</option>
-                  <option>₹20L - ₹40L</option>
-                  <option>₹40L - ₹80L</option>
-                  <option>₹80L+</option>
-                </select>
-              </div>
-            </div>
-            <button className="btn btn-primary" style={{ padding: '0 2.5rem', borderRadius: 'var(--radius-lg)' }}>
-              Search
-            </button>
-          </div>
+          </motion.div>
+        </div>
+        <div style={{ position: 'absolute', bottom: '-50%', left: '-10%', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(37, 99, 235, 0.2) 0%, transparent 70%)', borderRadius: '50%' }}></div>
+      </section>
 
-          <div style={{ display: 'flex', gap: '1.5rem', marginTop: '1.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
-            {['All Properties', 'New Launch', 'Ready to Move', 'Plots/Land', 'Commercial'].map((tab, i) => (
-              <button key={i} style={{ 
-                padding: '0.5rem 1.25rem', 
-                borderRadius: '99px', 
-                border: i === 0 ? 'none' : '1px solid var(--border-light)', 
-                backgroundColor: i === 0 ? 'var(--primary-blue)' : 'transparent',
-                color: i === 0 ? 'white' : 'var(--text-main)',
-                fontWeight: 600,
-                fontSize: '0.9rem',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap'
-              }}>
-                {tab}
-              </button>
-            ))}
+      {/* 🏷️ QUICK FILTERS - Point 14 */}
+      <section style={{ marginTop: '-40px', position: 'relative', zIndex: 2 }}>
+        <div className="container">
+          <div className="glass" style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-lg)', display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+            <QuickFilterItem label="BUDGET" value="Up to ₹50L" />
+            <div style={dividerStyle}></div>
+            <QuickFilterItem label="PROPERTY TYPE" value="Apartments" />
+            <div style={dividerStyle}></div>
+            <QuickFilterItem label="BHK" value="2, 3 BHK" />
+            <div style={dividerStyle}></div>
+            <QuickFilterItem label="VERIFIED" value="Verified Only" />
           </div>
         </div>
       </section>
 
-      {/* Featured Projects with Enhanced Cards */}
-      <section style={{ padding: '3rem 0' }}>
+      {/* 🛡️ TRUST SECTION - Point 18 */}
+      <section style={{ padding: '5rem 0' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '2rem' }}>
-            {PROJECTS.map((project) => (
-              <motion.div 
-                key={project.id}
-                whileHover={{ y: -5 }}
-                className="project-card"
-                style={{ backgroundColor: 'white', borderRadius: 'var(--radius-lg)', overflow: 'hidden', boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column' }}
-              >
-                {/* 🖼️ IMAGE GALLERY section style */}
-                <div style={{ position: 'relative', height: '220px' }}>
-                  <img src={project.coverImage} alt={project.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  <div style={{ position: 'absolute', top: '0.75rem', left: '0.75rem', display: 'flex', gap: '0.5rem' }}>
-                    {project.verified && <span className="badge badge-verified glass" style={{ backgroundColor: 'white' }}><ShieldCheck size={12} style={{ marginRight: '4px' }} /> Verified</span>}
-                    {project.reraCertified && <span className="badge glass" style={{ backgroundColor: 'white', color: 'var(--primary-blue)' }}>🏷️ RERA</span>}
-                  </div>
-                  <button className="glass" style={{ position: 'absolute', bottom: '0.75rem', right: '0.75rem', color: 'white', border: 'none', padding: '0.4rem 0.8rem', borderRadius: 'var(--radius-sm)', fontSize: '0.75rem', fontWeight: 600 }}>
-                    View All Photos (20)
-                  </button>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem' }}>
+            <TrustCard 
+              icon={<ShieldCheck size={32} color="var(--success-green)" />}
+              title="Verified by Local Expert"
+              desc="Every listing is physically verified by our local Islampur team."
+            />
+            <TrustCard 
+              icon={<TrendingUp size={32} color="var(--primary-blue)" />}
+              title="Real-time Availability"
+              desc="See exact vacant flats and plots. No stale or fake information."
+            />
+            <TrustCard 
+              icon={<Users size={32} color="var(--warn-coral)" />}
+              title="Dealer Direct"
+              desc="Connect directly with the trusted local dealer with zero brokerage."
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* 🏢 BROWSE BY CATEGORY - Point 14 */}
+      <section style={{ padding: '4rem 0' }}>
+        <div className="container">
+          <h2 style={{ marginBottom: '2rem' }}>Browse by Category</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+            {CATEGORIES.map(cat => (
+              <motion.div key={cat.id} whileHover={{ y: -5 }} style={{ backgroundColor: 'white', padding: '2rem', borderRadius: 'var(--radius-lg)', textAlign: 'center', cursor: 'pointer', border: '1px solid var(--border-light)' }}>
+                <div style={{ backgroundColor: 'rgba(37,99,235,0.05)', width: '60px', height: '60px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
+                  <Star color="var(--primary-blue)" />
                 </div>
-
-                <div style={{ padding: '1.25rem' }}>
-                  {/* 📍 PROPERTY TITLE + LOCATION */}
-                  <div style={{ marginBottom: '1rem' }}>
-                    <h3 style={{ fontSize: '1.2rem', color: 'var(--deep-navy)', marginBottom: '0.25rem' }}>{project.name}</h3>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                      <MapPin size={14} />
-                      <span>{project.location} • {project.distance}</span>
-                    </div>
-                  </div>
-
-                  {/* 💰 PRICE (Big & Bold) */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.25rem' }}>
-                    <div>
-                      <p style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--success-green)' }}>
-                        {project.priceRange} <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>[Negotiable]</span>
-                      </p>
-                      <p style={{ fontSize: '0.85rem', color: 'var(--primary-blue)', fontWeight: 600 }}>
-                        ₹{project.avgPriceSqFt}/sq.ft <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(Locality Avg: ₹{project.localityAvg})</span>
-                      </p>
-                    </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--soft-teal)', backgroundColor: 'rgba(20, 184, 166, 0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
-                        EMI: ₹38,500/mo
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* 📊 KEY SPECS (Quick Icons Row) */}
-                  <div style={{ display: 'flex', gap: '1.5rem', padding: '1rem 0', borderTop: '1px solid var(--border-light)', borderBottom: '1px solid var(--border-light)', marginBottom: '1.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', fontWeight: 600 }}>
-                      <BedDouble size={18} color="var(--text-muted)" /> {project.type === 'building' ? '3 BHK' : 'Plot'}
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', fontWeight: 600 }}>
-                      <Square size={18} color="var(--text-muted)" /> {project.type === 'building' ? '1,250 sq.ft' : project.totalArea}
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', fontWeight: 600 }}>
-                      <Car size={18} color="var(--text-muted)" /> 1 Parking
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', gap: '0.75rem' }}>
-                    <Link to={`/project/${project.id}`} style={{ flex: 1, textDecoration: 'none' }}>
-                      <button className="btn btn-primary" style={{ width: '100%', fontSize: '0.9rem' }}>Contact Owner</button>
-                    </Link>
-                    <button className="btn btn-outline-blue" style={{ padding: '0.75rem' }}>
-                      <Star size={18} />
-                    </button>
-                  </div>
-                </div>
+                <h4 style={{ marginBottom: '0.5rem' }}>{cat.name}</h4>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{cat.subTypes.length} Sub-types</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
-    </div>
 
+      {/* FEATURED PROJECTS - Point 14 */}
+      <section style={{ padding: '4rem 0', backgroundColor: 'white' }}>
+        <div className="container">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+            <h2>New Launch & Featured Projects</h2>
+            <Link to="/listings" style={{ fontWeight: 700, color: 'var(--primary-blue)', textDecoration: 'none' }}>View All Projects →</Link>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '2rem' }}>
+            {PROJECTS.map(p => (
+              <ProjectCard key={p.id} project={p} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+    </div>
   );
 };
+
+// --- SUB-COMPONENTS ---
+
+const ProjectCard = ({ project }) => (
+  <motion.div whileHover={{ y: -5 }} style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-md)' }}>
+    <div style={{ position: 'relative', height: '220px' }}>
+      <img src={project.coverImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
+      <div style={{ position: 'absolute', top: '1rem', left: '1rem' }}>
+        <span className="badge badge-verified glass" style={{ backgroundColor: 'white' }}>Verified ✅</span>
+      </div>
+    </div>
+    <div style={{ padding: '1.5rem' }}>
+      <p style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--success-green)', marginBottom: '0.5rem' }}>{project.priceRange}</p>
+      <h3 style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>{project.name}</h3>
+      <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>{project.location}</p>
+      
+      <div style={{ display: 'flex', gap: '1.5rem', padding: '1rem 0', borderTop: '1px solid var(--border-light)', borderBottom: '1px solid var(--border-light)', marginBottom: '1.5rem' }}>
+        <div style={{ fontSize: '0.85rem', fontWeight: 600 }}><BedDouble size={16} /> Configuration: 2, 3 BHK</div>
+      </div>
+      <Link to={`/project/${project.id}`}><button className="btn btn-primary" style={{ width: '100%' }}>View Available Units ({project.remainingUnits} left)</button></Link>
+    </div>
+  </motion.div>
+);
+
+const QuickFilterItem = ({ label, value }) => (
+  <div style={{ textAlign: 'center', cursor: 'pointer', padding: '0 2rem' }}>
+    <p style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-muted)', marginBottom: '0.25rem', letterSpacing: '0.05em' }}>{label}</p>
+    <p style={{ fontWeight: 700, color: 'var(--deep-navy)', fontSize: '1rem' }}>{value} ▾</p>
+  </div>
+);
+
+const TrustCard = ({ icon, title, desc }) => (
+  <div style={{ padding: '2rem', borderRadius: 'var(--radius-lg)', backgroundColor: 'white', border: '1px solid var(--border-light)', textAlign: 'center' }}>
+    <div style={{ marginBottom: '1.25rem' }}>{icon}</div>
+    <h3 style={{ marginBottom: '0.75rem', fontSize: '1.2rem' }}>{title}</h3>
+    <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>{desc}</p>
+  </div>
+);
+
+const dividerStyle = { width: '1px', height: '40px', backgroundColor: 'var(--border-light)' };
+const heroSelectStyle = { backgroundColor: 'transparent', color: 'white', border: 'none', fontWeight: 700, padding: '0 1rem', fontSize: '1.1rem', cursor: 'pointer' };
 
 export default Home;

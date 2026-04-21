@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Building2, Search, User, MapPin } from 'lucide-react';
+import { Building2, Search, User, MapPin, Menu } from 'lucide-react';
 
 const Navbar = () => {
   return (
@@ -12,27 +12,24 @@ const Navbar = () => {
           </div>
           <div>
             <h1 style={{ fontSize: '1.25rem', lineHeight: 1 }}>ISLAMPUR</h1>
-            <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.1em' }}>PROPERTY PORTAL</p>
+            <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 800, letterSpacing: '0.1em' }}>LOCAL DEALER PORTAL</p>
           </div>
         </Link>
 
+        {/* Desktop Links - Point 14 */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-          <div className="search-pill" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'var(--bg-soft-gray)', padding: '0.5rem 1rem', borderRadius: '999px', border: '1px solid var(--border-light)' }}>
-            <Search size={16} color="var(--text-muted)" />
-            <input 
-              type="text" 
-              placeholder="Search in Sangli, Islampur..." 
-              style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: '0.9rem', width: '200px' }}
-            />
+          <div className="nav-links" style={{ display: 'flex', gap: '1.5rem', fontWeight: 600, fontSize: '0.9rem' }}>
+            <Link to="/listings?type=buy" style={{ color: 'var(--deep-navy)', textDecoration: 'none' }}>Buy</Link>
+            <Link to="/listings?type=rent" style={{ color: 'var(--deep-navy)', textDecoration: 'none' }}>Rent</Link>
+            <Link to="/listings?cat=projects" style={{ color: 'var(--deep-navy)', textDecoration: 'none' }}>Projects</Link>
+            <Link to="/listings?cat=commercial" style={{ color: 'var(--deep-navy)', textDecoration: 'none' }}>Commercial</Link>
+            <Link to="/listings?cat=land" style={{ color: 'var(--deep-navy)', textDecoration: 'none' }}>Land</Link>
+            <Link to="/admin" style={{ color: 'var(--primary-blue)', textDecoration: 'none' }}>Admin</Link>
           </div>
 
-          <div style={{ display: 'flex', gap: '1.5rem', fontWeight: 500, fontSize: '0.95rem' }}>
-            <Link to="/" style={{ color: 'var(--deep-navy)', textDecoration: 'none' }}>Buy</Link>
-            <Link to="/" style={{ color: 'var(--deep-navy)', textDecoration: 'none' }}>Rent</Link>
-            <Link to="/admin" style={{ color: 'var(--primary-blue)', textDecoration: 'none', fontWeight: 600 }}>Admin</Link>
-          </div>
+          <div style={{ width: '1px', height: '24px', backgroundColor: 'var(--border-light)' }}></div>
 
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" style={{ padding: '0.5rem 1.25rem' }}>
             <User size={18} />
             <span>Login</span>
           </button>
