@@ -294,10 +294,15 @@ const CreateProjectFlow = ({ goToProjects }) => {
                          headers: { 'Content-Type': 'application/json' },
                          body: JSON.stringify(formData)
                        });
-                       if(res.ok) alert('Property Saved to Database Successfully!');
+                       if(!res.ok) {
+                         const errTx = await res.text();
+                         alert('Failed to save to database: ' + errTx);
+                         return;
+                       }
+                       alert('Project Saved to Database Successfully!');
                        goToProjects();
                      } catch(err) {
-                       alert('Error saving property to database. ' + err.message);
+                       alert('Network Error mapping to Vercel API. ' + err.message);
                      }
                   }}>Save Property to Database ✓</button>
               </div>
@@ -350,10 +355,15 @@ const CreateProjectFlow = ({ goToProjects }) => {
                          headers: { 'Content-Type': 'application/json' },
                          body: JSON.stringify(formData)
                        });
-                       if(res.ok) alert('Project & Inventory Saved to Database Successfully!');
+                       if(!res.ok) {
+                         const errTx = await res.text();
+                         alert('Failed to save to database: ' + errTx);
+                         return;
+                       }
+                       alert('Project & Inventory Saved to Database Successfully!');
                        goToProjects();
                      } catch(err) {
-                       alert('Error saving project to database. ' + err.message);
+                       alert('Network Error mapping to Vercel API. ' + err.message);
                      }
                   }}>Save Complete Project ✓</button>
                 </div>
