@@ -58,7 +58,11 @@ export default async function handler(req, res) {
     }
   } catch (error) {
     console.error('Database Error:', error);
-    res.status(500).json({ error: 'Database connection failed', details: error.message });
+    res.status(500).json({ 
+      error: 'Database connection failed', 
+      details: error.message,
+      hint: "Check if DATABASE_URL is set correctly in Vercel."
+    });
   } finally {
     await client.end();
   }

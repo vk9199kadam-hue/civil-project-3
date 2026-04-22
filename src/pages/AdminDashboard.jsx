@@ -483,7 +483,10 @@ const OverviewView = () => {
           fetch('/api/leads')
         ]);
         
-        if (!projRes.ok || !leadRes.ok) throw new Error('Failed to reach Database API');
+        if (!projRes.ok || !leadRes.ok) {
+           const errBody = !projRes.ok ? await projRes.json() : await leadRes.json();
+           throw new Error(errBody.details || errBody.error || 'Failed to reach Database API');
+        }
         
         const projs = await projRes.json();
         const leads = await leadRes.json();
