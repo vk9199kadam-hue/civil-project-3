@@ -473,6 +473,7 @@ const UnitBox = ({ unit, onEdit, projectType }) => {
 const OverviewView = () => {
   const [stats, setStats] = useState({ projects: 0, leads: 0 });
   const [recentLeads, setRecentLeads] = useState([]);
+  const [error, setError] = useState(null);
 
   React.useEffect(() => {
     const fetchOverview = async () => {
@@ -481,12 +482,20 @@ const OverviewView = () => {
           fetch('/api/projects'),
           fetch('/api/leads')
         ]);
+        
+        if (!projRes.ok || !leadRes.ok) throw new Error('Failed to reach Database API');
+        
         const projs = await projRes.json();
         const leads = await leadRes.json();
-        setStats({ projects: projs.length, leads: leads.length });
-        setRecentLeads(leads.slice(0, 5));
+        
+        setStats({ 
+          projects: Array.isArray(projs) ? projs.length : 0, 
+          leads: Array.isArray(leads) ? leads.length : 0 
+        });
+        setRecentLeads(Array.isArray(leads) ? leads.slice(0, 5) : []);
       } catch (err) {
         console.error(err);
+        setError(err.message);
       }
     };
     fetchOverview();
@@ -498,10 +507,15 @@ const OverviewView = () => {
       <h2>Dashboard Overview</h2>
       <div style={{ display: 'flex', gap: '1rem' }}>
         <button className="btn btn-outline-blue"><Download size={18} /> Export Reports</button>
-        <button className="btn btn-primary"><Plus size={18} /> New Project</button>
+        <button className="btn btn-primary" onClick={() => window.location.reload()}><Check /> Refresh Data</button>
       </div>
     </div>
     
+    {error && (
+      <div style={{ padding: '1rem', backgroundColor: '#fee2e2', color: '#b91c1c', borderRadius: '8px', marginBottom: '2rem', border: '1px solid #ef4444' }}>
+        <strong>Database Sync Error:</strong> {error}. Please check your Vercel Environment Variables.
+      </div>
+    )}
     <div className="mobile-stack" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2.5rem' }}>
       <Widget icon={<Building color="var(--primary-blue)" />} label="Total Projects" value={stats.projects} />
       <Widget icon={<LayoutGrid color="var(--success-green)" />} label="Available Units" value="--" color="var(--success-green)" />
@@ -548,7 +562,11 @@ const ProjectsView = () => {
       try {
         const res = await fetch('/api/projects');
         const data = await res.json();
-        if (res.ok) setDbProjects(data);
+        if (res.ok && Array.isArray(data)) {
+          setDbProjects(data);
+        } else {
+          console.error('API Error:', data);
+        }
       } catch (err) {
         console.error('Failed to fetch projects', err);
       } finally {
@@ -599,7 +617,9 @@ const LeadsView = () => {
       try {
         const res = await fetch('/api/leads');
         const data = await res.json();
-        if (res.ok) setDbLeads(data);
+        if (res.ok && Array.isArray(data)) {
+          setDbLeads(data);
+        }
       } catch (err) {
         console.error(err);
       } finally {
