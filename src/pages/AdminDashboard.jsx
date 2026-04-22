@@ -16,10 +16,10 @@ const AdminDashboard = () => {
   return (
     <div className="animate-fade-in" style={{ minHeight: '100vh', backgroundColor: '#f8fafc' }}>
       <div className="container" style={{ padding: '2rem 0' }}>
-        <div style={{ display: 'flex', gap: '2rem' }}>
+        <div className="admin-layout">
           
           {/* Sidebar */}
-          <aside style={{ width: '260px' }}>
+          <aside className="admin-sidebar">
             <div className="glass" style={{ padding: '1.5rem', borderRadius: 'var(--radius-lg)', height: 'fit-content', border: '1px solid var(--border-light)', backgroundColor: 'white' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem', padding: '0 0.5rem' }}>
                 <div style={{ backgroundColor: 'var(--deep-navy)', color: 'white', padding: '0.4rem', borderRadius: '4px' }}>
@@ -46,7 +46,7 @@ const AdminDashboard = () => {
           </aside>
 
           {/* Main Content Area */}
-          <main style={{ flex: 1 }}>
+          <main className="admin-main">
             {activeTab === 'overview' && <OverviewView />}
             {activeTab === 'projects' && <ProjectsView />}
             {activeTab === 'create-project' && <CreateProjectFlow goToProjects={() => setActiveTab('projects')} />}
@@ -201,7 +201,7 @@ const CreateProjectFlow = ({ goToProjects }) => {
               
               <div style={{ maxWidth: '500px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className="mobile-stack" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                   <div>
                     <label style={labelStyle}>Total Unsold & Sold Units in Project</label>
                     <input type="number" style={inputStyle} value={formData.totalUnits} onChange={e => setFormData({...formData, totalUnits: e.target.value})} placeholder="e.g. 50" />
@@ -470,14 +470,14 @@ const OverviewView = () => (
       </div>
     </div>
     
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2.5rem' }}>
+    <div className="mobile-stack" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2.5rem' }}>
       <Widget icon={<Building color="var(--primary-blue)" />} label="Total Projects" value={PROJECTS.length} />
       <Widget icon={<LayoutGrid color="var(--success-green)" />} label="Available Units" value="22" color="var(--success-green)" />
       <Widget icon={<Users color="var(--warm-coral)" />} label="New Leads" value={LEADS.length} color="var(--warm-coral)" />
       <Widget icon={<CheckCircle2 color="var(--soft-teal)" />} label="Sold This Month" value="8" />
     </div>
 
-    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
+    <div className="grid-2col" style={{ gap: '1.5rem' }}>
       <div className="glass" style={{ padding: '1.5rem', borderRadius: 'var(--radius-lg)', backgroundColor: 'white', border: '1px solid var(--border-light)' }}>
         <h3 style={{ marginBottom: '1.5rem' }}>Recent Inquiries</h3>
         {LEADS.map(lead => (

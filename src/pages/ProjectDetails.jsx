@@ -23,7 +23,7 @@ const ProjectDetails = () => {
       {/* 🖼️ HERO GALLERY */}
       <section style={{ backgroundColor: 'white', borderBottom: '1px solid var(--border-light)' }}>
         <div className="container" style={{ padding: '2rem 0' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1rem', height: '450px' }}>
+          <div className="grid-2col" style={{ height: '450px' }}>
             <div style={{ position: 'relative', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
               <img src={project.coverImage} alt={project.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <div style={{ position: 'absolute', top: '1rem', left: '1rem', display: 'flex', gap: '0.5rem' }}>
@@ -31,7 +31,7 @@ const ProjectDetails = () => {
                 <span className="badge glass" style={{ backgroundColor: 'white', color: 'var(--primary-blue)' }}>{project.reraId || 'P53100012345'}</span>
               </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateRows: '1fr 1fr', gap: '1rem' }}>
+            <div className="mobile-stack" style={{ display: 'grid', gridTemplateRows: '1fr 1fr', gap: '1rem' }}>
               <div style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
                 <img src="/images/interior.png" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
               </div>
@@ -49,7 +49,7 @@ const ProjectDetails = () => {
       {/* HEADER INFO */}
       <section style={{ backgroundColor: 'white', padding: '2rem 0', borderBottom: '1px solid var(--border-light)' }}>
         <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div className="mobile-stack" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1.5rem' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
                 <h1 style={{ fontSize: '2.5rem' }}>{project.name}</h1>
@@ -58,9 +58,9 @@ const ProjectDetails = () => {
                 <MapPin size={20} /> {project.location} {project.landmark ? `• ${project.landmark}` : ''}
               </p>
             </div>
-            <div style={{ textAlign: 'right' }}>
-              <p style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--success-green)' }}>{project.priceRange}</p>
-              <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
+            <div style={{ textAlign: 'left' }}>
+              <p style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--success-green)' }}>{project.priceRange || 'Contact Details'}</p>
+              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', flexWrap: 'wrap' }}>
                 <button className="btn glass" style={{ padding: '0.4rem 1rem' }}><Share2 size={16} /> Share</button>
                 <button className="btn btn-primary" onClick={() => setShowVisitForm(true)}><Calendar size={16} /> Book Site Visit</button>
               </div>
@@ -78,7 +78,7 @@ const ProjectDetails = () => {
           </div>
 
           <div className="glass" style={{ backgroundColor: 'white', padding: '2.5rem', borderRadius: 'var(--radius-xl)', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-lg)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '1.5rem' }}>
+            <div className="mobile-stack" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '1.5rem', gap: '1rem', flexWrap: 'wrap' }}>
               <div style={{ display: 'flex', gap: '2rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <div style={{ width: '16px', height: '16px', backgroundColor: 'var(--success-green)', borderRadius: '3px' }}></div>
@@ -137,7 +137,7 @@ const ProjectDetails = () => {
                   <button onClick={() => setSelectedUnit(null)} style={{ border: 'none', background: 'none', cursor: 'pointer' }}><X size={28} /></button>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
+                <div className="mobile-stack" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
                    <div style={{ padding: '1rem', backgroundColor: 'var(--bg-soft-gray)', borderRadius: '8px' }}>
                      <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)' }}>PRICE</p>
                      <p style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--success-green)' }}>₹{(selectedUnit.price / 100000).toFixed(1)} Lakhs</p>
