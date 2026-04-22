@@ -31,6 +31,10 @@ export default async function handler(req, res) {
       )
     `);
 
+    // Schema Migration
+    await client.query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS property_id STRING`);
+    await client.query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS property_name STRING`);
+
     if (req.method === 'GET') {
       const result = await client.query('SELECT * FROM leads ORDER BY created_at DESC');
       res.status(200).json(result.rows);

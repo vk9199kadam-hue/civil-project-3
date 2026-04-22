@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   try {
     await client.connect();
     
-    // Auto-create table
+    // Auto-create table and ensure the schema is up to date
     await client.query(`
       CREATE TABLE IF NOT EXISTS projects (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -30,6 +30,11 @@ export default async function handler(req, res) {
         created_at TIMESTAMP DEFAULT current_timestamp()
       )
     `);
+
+    // Schema Migration: Add missing columns if they don't exist in an old table
+    await client.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS category STRING`);
+    await client.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS sub_type STRING`);
+    await client.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS type STRING`);
 
     if (req.method === 'GET') {
       const result = await client.query('SELECT * FROM projects ORDER BY created_at DESC');
