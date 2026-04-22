@@ -63,6 +63,11 @@ export const PROJECT_CATEGORIES = {
         name: "Co-working Spaces",
         attributes: ["Meeting room access", "Printing facilities"],
         variants: ["Private Cabin", "Dedicated Desk", "Hot Desk"]
+      },
+      {
+        name: "Business Centers",
+        attributes: ["Mail handling", "Reception services"],
+        variants: ["Virtual Office", "Registered Office Address"]
       }
     ]
   },

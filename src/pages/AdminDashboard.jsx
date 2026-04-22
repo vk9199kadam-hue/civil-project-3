@@ -5,7 +5,7 @@ import {
   Plus, Settings, LayoutGrid, FileText, 
   BarChart3, Users, Building, Map, Trash2, Edit,
   CheckCircle2, Clock, MessageSquare, Phone, TrendingUp, Search, Download,
-  ArrowRight, ArrowLeft, Image as ImageIcon, Check, X, Info
+  ArrowRight, ArrowLeft, Image as ImageIcon, Check, X, Info, Home
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -130,7 +130,7 @@ const CreateProjectFlow = ({ goToProjects }) => {
       <AnimatePresence mode="wait">
         {step === 1 && (
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', marginTop: '2rem' }}>
               <TypeCard 
                 icon={<Building size={48} />} 
                 title="Building Project" 
@@ -139,9 +139,15 @@ const CreateProjectFlow = ({ goToProjects }) => {
               />
               <TypeCard 
                 icon={<Map size={48} />} 
-                title="Land / NA Plot Project" 
+                title="Land / Plotting Project" 
                 desc="Acreage projects, Plotting schemes, Agricultural layouts" 
                 onClick={() => handleTypeSelect('land')}
+              />
+              <TypeCard 
+                icon={<Home size={48} />} 
+                title="Standalone Property" 
+                desc="Individual house, shop, resale flat, or single land parcel" 
+                onClick={() => handleTypeSelect('property')}
               />
             </div>
           </motion.div>
@@ -178,13 +184,14 @@ const CreateProjectFlow = ({ goToProjects }) => {
                 </div>
               </div>
               <button className="btn btn-primary" style={{ width: '100%', marginTop: '2rem', padding: '1rem' }} onClick={nextStep}>
-                Next: Setup Inventory <ArrowRight size={18} />
+                {formData.type === 'property' ? 'Next: Enter Property Details' : 'Next: Setup Inventory'} <ArrowRight size={18} />
               </button>
             </div>
           </motion.div>
         )}
 
-        {step === 3 && (
+        {/* --- STEP 3 FOR BUILDING & LAND PROJECTS --- */}
+        {step === 3 && formData.type !== 'property' && (
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
             <div className="glass" style={{ backgroundColor: 'white', padding: '2rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-light)' }}>
               <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
@@ -228,6 +235,56 @@ const CreateProjectFlow = ({ goToProjects }) => {
           </motion.div>
         )}
 
+        {/* --- STEP 3 FOR STANDALONE PROPERTIES --- */}
+        {step === 3 && formData.type === 'property' && (
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+            <div className="glass" style={{ backgroundColor: 'white', padding: '2rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-light)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                <div>
+                  <h3 style={{ fontSize: '1.5rem' }}>Standalone Property Details</h3>
+                  <p style={{ color: 'var(--text-muted)' }}>Fill in the exact dimensions and pricing for this specific property.</p>
+                </div>
+                <button className="btn btn-success" onClick={async () => {
+                     try {
+                       const res = await fetch('/api/projects', {
+                         method: 'POST',
+                         headers: { 'Content-Type': 'application/json' },
+                         body: JSON.stringify(formData)
+                       });
+                       if(res.ok) alert('Property Saved to Database Successfully!');
+                       goToProjects();
+                     } catch(err) {
+                       alert('Error saving property to database. ' + err.message);
+                     }
+                  }}>Save Property to Database ✓</button>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div>
+                  <label style={labelStyle}>Price (₹) / Rent</label>
+                  <input type="number" style={inputStyle} value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} />
+                </div>
+                <div>
+                  <label style={labelStyle}>Total Area</label>
+                  <input type="text" style={inputStyle} placeholder="e.g. 1500 sq.ft or 2 acres" value={formData.area} onChange={e => setFormData({...formData, area: e.target.value})} />
+                </div>
+                <div>
+                  <label style={labelStyle}>Facing</label>
+                  <input type="text" style={inputStyle} placeholder="East, North..." value={formData.facing} onChange={e => setFormData({...formData, facing: e.target.value})} />
+                </div>
+                <div>
+                  <label style={labelStyle}>Specific Amenities (comma separated)</label>
+                  <input type="text" style={inputStyle} placeholder="Lift, Power Backup, Gym..." value={formData.amenitiesText} onChange={e => setFormData({...formData, amenitiesText: e.target.value})} />
+                </div>
+                <div style={{ gridColumn: '1 / -1' }}>
+                  <label style={labelStyle}>Property Image URL</label>
+                  <input type="text" style={inputStyle} placeholder="https://example.com/image.jpg" value={formData.coverImage} onChange={e => setFormData({...formData, coverImage: e.target.value})} />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {step === 4 && (
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
             <div className="glass" style={{ backgroundColor: 'white', padding: '2rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-light)' }}>
@@ -243,10 +300,19 @@ const CreateProjectFlow = ({ goToProjects }) => {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem' }}>
                     <div style={{ width: '12px', height: '12px', border: '1px solid var(--border-light)', borderRadius: '2px' }}></div> Pending
                   </div>
-                  <button className="btn btn-success" onClick={() => {
-                    alert('Project Saved to Database Conceptually!');
-                    goToProjects();
-                  }}>Save Complete Project</button>
+                  <button className="btn btn-success" onClick={async () => {
+                     try {
+                       const res = await fetch('/api/projects', {
+                         method: 'POST',
+                         headers: { 'Content-Type': 'application/json' },
+                         body: JSON.stringify(formData)
+                       });
+                       if(res.ok) alert('Project & Inventory Saved to Database Successfully!');
+                       goToProjects();
+                     } catch(err) {
+                       alert('Error saving project to database. ' + err.message);
+                     }
+                  }}>Save Complete Project ✓</button>
                 </div>
               </div>
 
