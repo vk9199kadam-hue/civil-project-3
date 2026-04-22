@@ -195,7 +195,7 @@ const CreateProjectFlow = ({ goToProjects }) => {
                     )}
                   </div>
                   <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.4rem' }}>
-                    💡 Tip: Upload to <a href="https://postimages.org/" target="_blank" rel="noreferrer" style={{ color: 'var(--primary-blue)', textDecoration: 'underline' }}>PostImages.org</a>, then copy the <strong>Direct Link</strong> ending in .jpg or .png
+                    💡 Tip: Upload to <a href="https://imgbb.com/" target="_blank" rel="noreferrer" style={{ color: 'var(--primary-blue)', textDecoration: 'underline' }}>ImgBB.com</a>, then copy the <strong>Direct Link</strong> (ending in .jpg or .png)
                   </p>
                 </div>
                 <div style={{ gridColumn: '1 / -1' }}>
@@ -362,7 +362,7 @@ const CreateProjectFlow = ({ goToProjects }) => {
                     )}
                   </div>
                   <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.4rem' }}>
-                    Tip: Upload your photo to <a href="https://postimages.org/" target="_blank" rel="noreferrer" style={{ color: 'var(--primary-blue)' }}>PostImages.org</a> and paste the <strong>Direct Link</strong> here.
+                    Tip: Upload your photo to <a href="https://imgbb.com/" target="_blank" rel="noreferrer" style={{ color: 'var(--primary-blue)' }}>ImgBB.com</a> and paste the <strong>Direct Link</strong> here.
                   </p>
                 </div>
               </div>
