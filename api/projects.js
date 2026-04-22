@@ -35,6 +35,7 @@ export default async function handler(req, res) {
     await client.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS category STRING`);
     await client.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS sub_type STRING`);
     await client.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS type STRING`);
+    await client.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS data JSONB DEFAULT '{}'`);
 
     if (req.method === 'GET') {
       const result = await client.query('SELECT * FROM projects ORDER BY created_at DESC');
