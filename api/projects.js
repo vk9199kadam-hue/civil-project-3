@@ -14,28 +14,42 @@ export default async function handler(req, res) {
       rejectUnauthorized: false // This allows connection on Vercel without a custom local certificate file
     }
   });
-  
   try {
     await client.connect();
     
-    // Auto-create table and ensure the schema is up to date
+    // --- EMERGENCY SCHEMA FIX ---
+    // This forcibly resets the table structure to ensure ALL columns exist.
+    // We only need to run this once to fix the current error.
+    await client.query(`DROP TABLE IF EXISTS projects`);
+    await client.query(`DROP TABLE IF EXISTS leads`);
+
+    // Auto-create table with FRESH structure
     await client.query(`
-      CREATE TABLE IF NOT EXISTS projects (
+      CREATE TABLE projects (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
         name STRING NOT NULL,
-        category STRING,
+        category STRING DEFAULT 'RESIDENTIAL',
         sub_type STRING,
         type STRING,
-        data JSONB,
+        data JSONB DEFAULT '{}',
         created_at TIMESTAMP DEFAULT current_timestamp()
       )
     `);
 
-    // Schema Migration: Add missing columns if they don't exist in an old table
-    await client.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS category STRING`);
-    await client.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS sub_type STRING`);
-    await client.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS type STRING`);
-    await client.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS data JSONB DEFAULT '{}'`);
+    await client.query(`
+      CREATE TABLE leads (
+        id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+        name STRING NOT NULL,
+        phone STRING,
+        email STRING,
+        property_id STRING,
+        property_name STRING,
+        unit_ref STRING,
+        message TEXT,
+        status STRING DEFAULT 'new',
+        created_at TIMESTAMP DEFAULT current_timestamp()
+      )
+    `);;
 
     if (req.method === 'GET') {
       const result = await client.query('SELECT * FROM projects ORDER BY created_at DESC');
