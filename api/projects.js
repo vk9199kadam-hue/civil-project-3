@@ -1,10 +1,13 @@
 import { Client } from 'pg';
 
 export default async function handler(req, res) {
-  // Try to use standard SSL for modern Node environments (like Vercel)
-  // Fall back to the absolute local path for localhost development if needed.
-  let connectionString = "postgresql://civil_project_user:civil%20project%20pas-dZKmWUaoSB2sdr_cL47HSQ@69958b9b-c09e-41bb-849c-23b14b0b8ec0.cockroachlabs.cloud:26257/defaultdb";
+  // Uses the Environment Variable configured in Vercel
+  const connectionString = process.env.DATABASE_URL;
   
+  if (!connectionString) {
+    return res.status(500).json({ error: "DATABASE_URL is missing in environment variables." });
+  }
+
   const client = new Client({ 
     connectionString,
     ssl: {
