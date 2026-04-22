@@ -17,16 +17,9 @@ export default async function handler(req, res) {
   try {
     await client.connect();
     
-    // --- EMERGENCY SCHEMA FIX ---
-    // This forcibly resets the table structure to ensure ALL columns exist.
-    // We only need to run this once to fix the current error.
-    await client.query(`DROP TABLE IF EXISTS units CASCADE`);
-    await client.query(`DROP TABLE IF EXISTS projects CASCADE`);
-    await client.query(`DROP TABLE IF EXISTS leads CASCADE`);
-
-    // Auto-create table with FRESH structure
+    // Auto-create tables if they don't exist
     await client.query(`
-      CREATE TABLE projects (
+      CREATE TABLE IF NOT EXISTS projects (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
         name STRING NOT NULL,
         category STRING DEFAULT 'RESIDENTIAL',
@@ -38,7 +31,7 @@ export default async function handler(req, res) {
     `);
 
     await client.query(`
-      CREATE TABLE leads (
+      CREATE TABLE IF NOT EXISTS leads (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
         name STRING NOT NULL,
         phone STRING,
@@ -50,7 +43,7 @@ export default async function handler(req, res) {
         status STRING DEFAULT 'new',
         created_at TIMESTAMP DEFAULT current_timestamp()
       )
-    `);;
+    `);
 
     if (req.method === 'GET') {
       const result = await client.query('SELECT * FROM projects ORDER BY created_at DESC');
