@@ -21,12 +21,22 @@ const ProjectDetails = () => {
       try {
         const res = await fetch('/api/projects');
         const data = await res.json();
-        if (res.ok) {
-           const found = data.find(p => p.id === id);
-           setProject(found || null);
+        let found = null;
+        
+        if (res.ok && data.length > 0) {
+           found = data.find(p => p.id === id);
         }
+        
+        // VIRTUAL FALLBACK: If not in DB, look in Mock Data
+        if (!found) {
+          found = PROJECTS.find(p => p.id === id);
+        }
+        
+        setProject(found || null);
       } catch (err) {
-        console.error('Failed to fetch project details', err);
+        console.error('Failed to fetch project details, checking mock data', err);
+        const found = PROJECTS.find(p => p.id === id);
+        setProject(found || null);
       } finally {
         setLoading(false);
       }

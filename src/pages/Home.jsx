@@ -13,9 +13,15 @@ const Home = () => {
       try {
         const res = await fetch('/api/projects');
         const data = await res.json();
-        if (res.ok) setDbProjects(data);
+        if (res.ok && data.length > 0) {
+          setDbProjects(data);
+        } else {
+          // If DB is empty or fails, use MOCK data for the "virtual" view
+          setDbProjects(PROJECTS);
+        }
       } catch (err) {
-        console.error('Failed to fetch live projects', err);
+        console.error('Failed to fetch live projects, falling back to mock data', err);
+        setDbProjects(PROJECTS);
       } finally {
         setLoading(false);
       }
@@ -26,12 +32,12 @@ const Home = () => {
   return (
     <div className="animate-fade-in" style={{ backgroundColor: 'var(--bg-soft-gray)', minHeight: '100vh', paddingBottom: '4rem' }}>
       
-      {/* 🏢 PROJECT LISTINGS - Admin Filled Content */}
+      {/* 🏢 PROJECT LISTINGS - Hybrid (Live + Virtual Fallback) */}
       <section style={{ marginTop: '4rem' }}>
         <div className="container">
           {loading ? (
              <div style={{ textAlign: 'center', padding: '4rem' }}>
-                <h3>Loading LIVE properties from database...</h3>
+                <h3>Loading properties...</h3>
              </div>
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem' }}>
