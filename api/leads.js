@@ -19,21 +19,21 @@ export default async function handler(req, res) {
     await client.query(`
       CREATE TABLE IF NOT EXISTS leads (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-        name STRING NOT NULL,
-        phone STRING,
-        email STRING,
-        property_id STRING,
-        property_name STRING,
-        unit_ref STRING,
+        name VARCHAR(255) NOT NULL,
+        phone VARCHAR(50),
+        email VARCHAR(255),
+        property_id VARCHAR(100),
+        property_name VARCHAR(255),
+        unit_ref VARCHAR(100),
         message TEXT,
-        status STRING DEFAULT 'new',
-        created_at TIMESTAMP DEFAULT current_timestamp()
+        status VARCHAR(50) DEFAULT 'new',
+        created_at TIMESTAMP DEFAULT current_timestamp
       )
     `);
 
     // Schema Migration
-    await client.query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS property_id STRING`);
-    await client.query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS property_name STRING`);
+    await client.query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS property_id VARCHAR(100)`);
+    await client.query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS property_name VARCHAR(255)`);
 
     if (req.method === 'GET') {
       const result = await client.query('SELECT * FROM leads ORDER BY created_at DESC');
@@ -57,6 +57,11 @@ export default async function handler(req, res) {
       
       const result = await client.query(query, values);
       res.status(201).json(result.rows[0]);
+    } else if (req.method === 'DELETE') {
+      const { id } = req.query;
+      if (!id) return res.status(400).json({ error: "Missing ID" });
+      await client.query('DELETE FROM leads WHERE id = $1', [id]);
+      res.status(200).json({ message: 'Lead deleted' });
     } else {
       res.status(405).json({ message: 'Method Not Allowed' });
     }

@@ -21,12 +21,12 @@ export default async function handler(req, res) {
     await client.query(`
       CREATE TABLE IF NOT EXISTS projects (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-        name STRING NOT NULL,
-        category STRING DEFAULT 'RESIDENTIAL',
-        sub_type STRING,
-        type STRING,
+        name VARCHAR(255) NOT NULL,
+        category VARCHAR(100) DEFAULT 'RESIDENTIAL',
+        sub_type VARCHAR(100),
+        type VARCHAR(100),
         data JSONB DEFAULT '{}',
-        created_at TIMESTAMP DEFAULT current_timestamp()
+        created_at TIMESTAMP DEFAULT current_timestamp
       )
     `);
 
@@ -47,14 +47,14 @@ export default async function handler(req, res) {
 
     if (req.method === 'GET') {
       const result = await client.query('SELECT * FROM projects ORDER BY created_at DESC');
-      // Format data properly for the frontend
       const formattedProjects = result.rows.map(row => ({
+        ...row.data,
         id: row.id,
         name: row.name,
         category: row.category,
         subType: row.sub_type,
         type: row.type,
-        ...row.data
+        created_at: row.created_at
       }));
       res.status(200).json(formattedProjects);
       
@@ -74,6 +74,11 @@ export default async function handler(req, res) {
       
       const result = await client.query(query, values);
       res.status(201).json(result.rows[0]);
+    } else if (req.method === 'DELETE') {
+      const { id } = req.query;
+      if (!id) return res.status(400).json({ error: "Missing ID" });
+      await client.query('DELETE FROM projects WHERE id = $1', [id]);
+      res.status(200).json({ message: 'Project deleted' });
     } else {
       res.status(405).json({ message: 'Method Not Allowed' });
     }

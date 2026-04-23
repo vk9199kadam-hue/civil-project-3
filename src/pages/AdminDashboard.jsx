@@ -92,7 +92,7 @@ const CreateProjectFlow = ({ goToProjects }) => {
 
   const generateInventory = (remUnitsCount) => {
     const newInventory = Array.from({ length: remUnitsCount }, (_, i) => ({
-      id: `unit-${i + 1}`,
+      id: `unit-${Date.now()}-${Math.floor(Math.random() * 1000)}-${i + 1}`,
       number: i + 1,
       name: formData.type === 'building' ? `Flat ${i + 1}` : `Plot ${i + 1}`,
       floor: formData.type === 'building' ? 1 : null,
@@ -661,8 +661,8 @@ const OverviewView = () => {
       <div className="glass" style={{ padding: '1.5rem', borderRadius: 'var(--radius-lg)', backgroundColor: 'white', border: '1px solid var(--border-light)' }}>
         <h3 style={{ marginBottom: '1.5rem' }}>Platform Health</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <StatBar label="Database Connection" value={100} total={100} color="var(--success-green)" />
-          <StatBar label="API Response" value={98} total={100} color="var(--primary-blue)" />
+          <StatBar label="Database Connection" value={error ? 0 : 100} total={100} color={error ? '#ef4444' : 'var(--success-green)'} />
+          <StatBar label="API Response" value={error ? 10 : 98} total={100} color={error ? 'var(--warm-coral)' : 'var(--primary-blue)'} />
           <StatBar label="Form Uptime" value={100} total={100} color="var(--gold-premium)" />
         </div>
       </div>
@@ -694,6 +694,20 @@ const ProjectsView = () => {
     fetchProjects();
   }, []);
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this project? This will remove it permanently from the database.")) return;
+    try {
+      const res = await fetch(`/api/projects?id=${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        setDbProjects(dbProjects.filter(p => p.id !== id));
+      } else {
+        alert("Failed to delete project.");
+      }
+    } catch (err) {
+      alert("Error deleting project.");
+    }
+  };
+
   return (
     <div className="animate-fade-in">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
@@ -717,7 +731,13 @@ const ProjectsView = () => {
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button className="btn glass" style={{ padding: '0.4rem', fontSize: '0.75rem', fontWeight: 'bold' }}>LIVE</button>
               <button className="btn glass" style={{ padding: '0.4rem' }}><Edit size={16} /></button>
-              <button className="btn glass" style={{ padding: '0.4rem', color: '#ef4444' }}><Trash2 size={16} /></button>
+              <button 
+                className="btn glass" 
+                style={{ padding: '0.4rem', color: '#ef4444' }} 
+                onClick={() => handleDelete(p.id)}
+              >
+                <Trash2 size={16} />
+              </button>
             </div>
           </div>
         ))}
@@ -747,6 +767,18 @@ const LeadsView = () => {
     fetchLeads();
   }, []);
 
+  const handleDeleteLead = async (id) => {
+    if (!window.confirm("Remove this inquiry?")) return;
+    try {
+      const res = await fetch(`/api/leads?id=${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        setDbLeads(dbLeads.filter(l => l.id !== id));
+      }
+    } catch (err) {
+      alert("Error deleting inquiry.");
+    }
+  };
+
   return (
     <div className="animate-fade-in">
       <h2>Inquiries</h2>
@@ -757,7 +789,15 @@ const LeadsView = () => {
           <div key={l.id} className="glass" style={{ padding: '1.5rem', backgroundColor: 'white', marginBottom: '1rem', borderRadius: '12px', border: '1px solid var(--border-light)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
               <p style={{ fontWeight: 800, fontSize: '1.1rem' }}>{l.name}</p>
-              <span className="badge badge-verified">{l.status}</span>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <span className="badge badge-verified">{l.status}</span>
+                <button 
+                  onClick={() => handleDeleteLead(l.id)} 
+                  style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '0.2rem' }}
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', fontSize: '0.9rem' }}>
               <p><strong>Phone:</strong> {l.phone}</p>
